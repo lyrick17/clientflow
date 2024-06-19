@@ -1,0 +1,27 @@
+Bootstrap   - 5.3.3
+
+Python packages:
+
+Python3 version - 3.11.4 as of development
+Django      - 5.0.6
+
+Setting Up the Project Steps:
+1. Create a folder with any name, which will contain:
+    - venvcrm
+    - clientflow (this folder)
+    Do not create empty folders with these names
+2. In Command Prompt, go to the directory of your folder, and type 'python -m venv venvcrm' without the quotations
+3. Run the virtual environment by typing this (considering you are in Windows): venvcrm\Scripts\activate
+4. Once venv is running, type the command: pip install django
+5. If there are other required packages, install them as well. If a `requirements.txt` file is present, use: pip install -r requirements.txt
+6. You are now set up
+
+Commands (considering the venv is running):
+- To run the server, run this command:
+    python manage.py runserver 
+- Create superuser:
+    python manage.py createsuperuser
+    Follow the prompts to set your own username, email, and password.
+- Make migrations
+    python manage.py makemigrations
+    python manage.py migrate
