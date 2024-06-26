@@ -4,8 +4,8 @@
 
 <br>
 
-<div class="row px-5 gx-0">
-    <div class="col-md px-1">
+<main class="row px-5 gx-0">
+    <section class="col-md px-1">
         <div class="card card-body">
             <h5>Products</h5>
         </div>
@@ -17,18 +17,40 @@
                     <th>Price</th>
                 </tr>
                 
-                {% for i in products %}
+                {% for product in products %}
                     <tr>
-                        <td>{{i.name  }}</td>
-                        <td>{{i.category  }}</td>
-                        <td>{{i.price  }}</td>
+                        <td>{{ product.name  }}</td>
+                        <td>{{ product.category  }}</td>
+                        <td>{{ product.price  }}</td>
                     </tr>
                 {% endfor %}
 
             </table>
         </div>
-    </div>
+    </section>
+
+    <section class="pagination w-100 my-2">
+        <div class="mx-auto">
+            <span class="step-links">
+                {% if products.has_previous %}
+                    <a href="?page=1" class="btn btn-sm btn-primary">🢀🢀</a>
+                    <a href="?page={{ products.previous_page_number }}" class="btn btn-sm btn-primary">🡠</a>
+                {% endif %}
+            </span>
     
-</div>
+            <span class="current btn btn-sm btn-secondary px-2 mx-2 fw-bold">
+                {{ products.number }}
+            </span>
+    
+            <span class="step-links">
+                {% if products.has_next %}
+                    <a href="?page={{ products.next_page_number }}" class="btn btn-sm btn-primary">🡢</a>
+                    <a href="?page={{ products.paginator.num_pages }}" class="btn btn-sm btn-primary">🢂🢂</a>
+                {% endif %}
+            </span>
+        </div>
+    </section>
+    
+</main>
 
 {% endblock %}

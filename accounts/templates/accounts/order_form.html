@@ -2,10 +2,21 @@
 
 {% load static %}
 
-{% block content %}
-<form action="" method="POST">
-    {% csrf_token %}    <!--way of sending data securely-->
-    {{form}}            <!--put the form-->
-    <input type="submit" name="Submit">
-</form>
+{% block content %}\
+<main role="main">
+    <div class="card card-body w-75 mx-auto my-5 text-center">
+        
+        <form action="" method="POST" class="py-2">
+            {% csrf_token %}    <!--way of sending data securely-->
+            {{ formset.management_form }}
+            {% for form in formset %}
+                {{form}}            <!--put the form-->
+                <hr />
+
+            {% endfor %}
+            <input class="btn btn-success" type="submit" name="Submit" value="Submit">
+        </form>
+
+    </div>
+</main>
 {% endblock %}

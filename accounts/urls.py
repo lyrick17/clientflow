@@ -8,6 +8,8 @@ urlpatterns = [
     path('products/', views.products, name="products"),
     path('customer/<str:primary_key>', views.customer, name="customer"),
 
-    path('create_order/', views.createOrder, name="create_order"),
-    path('update_order/<str:primary_key>', views.updateOrder, name="update_order")
+    path('create_order/<str:customer_key>', views.createOrder, name="create_order"), # key of customer
+    path('update_order/<str:primary_key>', views.updateOrder, name="update_order"), # key of order
+    path('delete_order/<str:primary_key>', views.deleteOrder, name="delete_order")  # key of order
+
 ]

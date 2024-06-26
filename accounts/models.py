@@ -57,4 +57,4 @@ class Order(models.Model):
     
 
     def __str__(self):
-        return self.customer.name
+        return self.product.name

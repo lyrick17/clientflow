@@ -1,0 +1,24 @@
+{% extends  'accounts/main.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<main role="main">
+    <div class="card card-body w-75 mx-auto my-5 text-center">
+        
+        <h5 class="py-3">Are you sure you want to delete "{{ item }}"?</h5>
+    
+    
+        <form action="{% url 'delete_order' item.id %}" method="POST" class="py-2">
+            {% csrf_token %}    <!--way of sending data securely-->
+            <a class="btn btn-secondary" href="{% url 'home' %}">Cancel</a>
+            <input class="btn btn-outline-danger" type="submit" name="Confirm" value="Delete Item">
+        </form>
+
+    </div>
+</main>
+
+
+
+{% endblock %}
