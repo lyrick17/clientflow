@@ -2,12 +2,18 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.forms import inlineformset_factory  # basically way of creating multiple forms in one form
 from django.core.paginator import Paginator     # pagination
+from django.contrib.auth.forms import UserCreationForm  #
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+
 
 from .models import *
-from .forms import OrderForm
+from .forms import OrderForm, CreateUserForm
 from .filters import OrderFilter
 
 # Create your views here.
+@login_required(login_url='login')
 def home(request):
     orders = Order.objects.all()
     customers = Customer.objects.all()
@@ -25,6 +31,7 @@ def home(request):
                "pending": pending}
     return render(request, 'accounts/dashboard.html', context)
 
+@login_required(login_url='login')
 def products(request):
     
     products_list = Product.objects.all()            # query into db to get all products
@@ -38,6 +45,7 @@ def products(request):
     context = {"products": products_display}
     return render(request, 'accounts/products.html', context)
 
+@login_required(login_url='login')
 def customer(request, primary_key):
 
     customer = Customer.objects.get(id=primary_key)
@@ -55,6 +63,7 @@ def customer(request, primary_key):
     return render(request, 'accounts/customer.html', context)
 
 # CRUD Operations for Orders
+@login_required(login_url='login')
 def createOrder(request, customer_key):
     OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=10)
     customer = Customer.objects.get(id=customer_key)
@@ -77,6 +86,7 @@ def createOrder(request, customer_key):
     context = {"formset": formset}
     return render(request, 'accounts/order_form.html', context)
 
+@login_required(login_url='login')
 def updateOrder(request, primary_key):
     
     order = Order.objects.get(id=primary_key)
@@ -90,9 +100,11 @@ def updateOrder(request, primary_key):
             form.save()
             # redirect to home page
             return redirect('/')
+        
     context = {'form': form}
     return render(request, 'accounts/order_form.html', context)
 
+@login_required(login_url='login')
 def deleteOrder(request, primary_key):
     order = Order.objects.get(id=primary_key)
     if request.method == "POST":
@@ -100,3 +112,49 @@ def deleteOrder(request, primary_key):
         return redirect('/')
     context = {'item': order}
     return render(request, 'accounts/delete.html', context)
+
+
+
+
+def registerPage(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    
+    form = CreateUserForm()
+
+    if request.method == "POST":
+        # Django handles the validation 
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, "Account created for " + username)
+
+            return redirect('login')
+
+    context = {'form': form}
+    return render(request, 'accounts/register.html', context)
+
+def loginPage(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.info(request, "Login Credentials incorrect")
+
+    context = {}
+    return render(request, 'accounts/login.html', context)
+
+@login_required(login_url='login')
+def logoutUser(request):
+    logout(request)
+    return redirect('login')

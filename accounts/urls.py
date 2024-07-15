@@ -10,6 +10,9 @@ urlpatterns = [
 
     path('create_order/<str:customer_key>', views.createOrder, name="create_order"), # key of customer
     path('update_order/<str:primary_key>', views.updateOrder, name="update_order"), # key of order
-    path('delete_order/<str:primary_key>', views.deleteOrder, name="delete_order")  # key of order
+    path('delete_order/<str:primary_key>', views.deleteOrder, name="delete_order"),  # key of order
 
+    path('register/', views.registerPage, name='register'),
+    path('login/', views.loginPage, name="login"),
+    path('logout/', views.logoutUser, name="logout")
 ]
